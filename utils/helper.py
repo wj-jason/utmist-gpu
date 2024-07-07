@@ -89,7 +89,7 @@ def terminate_instance(instance_id):
 			auth=HTTPBasicAuth(API_KEY, ''),
 			json=data
 			)
-	if reponse: print(response.json())
+	if response: print(response.json())
 	else: print('[ERROR]')
 
 def terminate_all():
@@ -98,7 +98,6 @@ def terminate_all():
     
     if data:
         instance_ids = [inst["id"] for inst in data['data']]
-        
         if instance_ids:
             payload = {"instance_ids": instance_ids}
             terminate_endpoint = "https://cloud.lambdalabs.com/api/v1/instance-operations/terminate"
@@ -109,7 +108,7 @@ def terminate_all():
             )
             
             if response.status_code == 200:
-                print("Termination initiated for all instances.")
+                print("All instances terminated.")
             else:
                 print("[ERROR] Failed to initiate termination:", response.status_code)
                 print(response.json())
@@ -133,6 +132,5 @@ def main():
 	if args.prune: terminate_all()
 
 if __name__ == '__main__':
-	# launch_instance()
-	# terminate_all()
-	# print_instance_details()
+    main()
+
