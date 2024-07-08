@@ -45,13 +45,6 @@ def get_all_instances():
             instances.append(inst)
     return instances
 
-def _init_instances():
-    instances = get_all_instances()
-    if instances:
-        for inst in instances:
-            inst_id = inst["id"]
-            INSTANCES.append(inst_id)
-
 def print_instance_details():
     instances = get_all_instances()
     if instances:
@@ -93,6 +86,10 @@ def launch_instance(
             auth=HTTPBasicAuth(API_KEY, ''),
             json=payload
             )
+    if response.status_code != 200:
+        print(response)
+        return
+
     response = response.json()
     inst_id = response["data"]["instance_ids"][0]
     
