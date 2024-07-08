@@ -1,4 +1,4 @@
-# GPU Cloud (Fog)
+# Lambda Cloud for UTMIST (Fog)
 
 ```
 # launch new instance
