@@ -150,6 +150,7 @@ def terminate_all():
         print("[ERROR] Failed to fetch instances.")
 
 def main():
+    get_ssh_keys()
     parser = argparse.ArgumentParser(description="Lambda Cloud API Client")
     parser.add_argument('--ls', action='store_true', help='Get all instances')
     parser.add_argument('--lsk', action='store_true', help='Get all SSH key names')
