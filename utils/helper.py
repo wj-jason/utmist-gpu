@@ -69,14 +69,16 @@ def print_instance_details():
     else:
         print(f"{Fore.RED}No instances available.{Fore.RESET}") 
 
-def launch_instance(
+def launch_instance( 
+        ssh_key_name: str,
         region_name: str = "us-east-1",
         instance_type_name: str = "gpu_1x_a100_sxm4",
-        ssh_key_names: list[str] = SSH_KEYS,
+        # ssh_key_names: list[str] = SSH_KEYS,
         file_system_names: list[str] = [],
-        quantity: int = 1
+        quantity: int = 1,
         ):
-    curr_instances = get_all_instances()
+    # why make it a list if you can't put multiple values???
+    ssh_key_names = [ssh_key_name]
     print(f"{Fore.LIGHTBLUE_EX}Launching instance{Fore.RESET}") 
     payload = {
             "region_name": region_name,
@@ -91,15 +93,18 @@ def launch_instance(
             auth=HTTPBasicAuth(API_KEY, ''),
             json=payload
             )
-    endpoint = "https://cloud.lambdalabs.com/api/v1/instances"
+    response = response.json()
+    inst_id = response["data"]["instance_ids"][0]
+    
+    endpoint = f"https://cloud.lambdalabs.com/api/v1/instances/{inst_id}"
     data = query(endpoint)
+    # print(data)
     if data:    
-        print(f"{Fore.LIGHTGREEN_EX}Instance launched, associating IP{Fore.RESET}")
-        name = data["data"][0]["instance_type"]["name"];
-        price  = data["data"][0]["instance_type"]["price_cents_per_hour"]/100
-        inst_id = data["data"][0]["id"]
-
-        ip = data["data"][0].get("ip", "N/A")
+        print(f"{Fore.LIGHTGREEN_EX}Instance launched.{Fore.RESET}")
+        name = data["data"]["instance_type"]["name"]
+        price = data["data"]["instance_type"]["price_cents_per_hour"]/100
+        ip = data.get("ip", "N/A")
+        
         print(f"{Fore.GREEN}Instance: {Fore.RESET}{name}")
         print(f"{Fore.YELLOW}Price per hour: {Fore.RESET}${price:.2f}")
         print(f"{Fore.CYAN}Id: {Fore.RESET}{inst_id}")
@@ -147,14 +152,16 @@ def terminate_all():
 def main():
     parser = argparse.ArgumentParser(description="Lambda Cloud API Client")
     parser.add_argument('--ls', action='store_true', help='Get all instances')
-    parser.add_argument('--launch', action='store_true', help='Start an instance')
+    parser.add_argument('--lsk', action='store_true', help='Get all SSH key names')
+    parser.add_argument('--launch', type=str, help='Start an instance')
     parser.add_argument('--stop', type=str, help='Stop an instance by ID')
     parser.add_argument('--prune', action='store_true', help='Stop all instances')
 
     args = parser.parse_args()
 
     if args.ls: print_instance_details()
-    if args.launch: launch_instance()
+    if args.lsk: print(SSH_KEYS)
+    if args.launch: launch_instance(args.launch)
     if args.stop: terminate_instance(args.stop)
     if args.prune: terminate_all()
 
