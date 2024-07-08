@@ -2,23 +2,25 @@
 
 ```
 # launch new instance
-python3 -m utils.helper --launch <SSH_KEY_NAME>
+fog --launch <SSH_KEY_NAME>
 
 # list active instances and details
-python3 -m utils.helper --ls
+fog --ls
 
 # list all ssh key names
-python3 -m utils.helper --lsk
+fog --lsk
 
 # stop instance by ID
-python3 -m utils.helper --stop <INSTANCE_ID>
+fog --stop <INSTANCE_ID>
 
 # stop all instances
-python3 -m utils.helper --prune
+fog --prune
 ```
 ## To use:
 1. Clone this repository
-2. Get Lambda API key, place it in `.env` (ask Rachel)
+2. Create a venv `python3 -m venv venv` and activate it
+3. Run `pip install .`
+4. Get Lambda API key, place it in `.env` (ask Rachel)
 ```
 # .env
 API_KEY =
