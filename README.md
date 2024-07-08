@@ -37,7 +37,7 @@ jason@jason:~/git_repos/utmist-gpu$ python3 -m utils.helper --lsk
 ['ssh-key-general', 'ssh-key-andrew', 'ssh-key-a100']
 ```
 
-Next we can launch an instance, specifying the ssh key that is on your machine (see **notes** for why IP and Jupyter URL is N/A):
+Next we can launch an instance, specifying the ssh key that is on your machine (see [notes](#notes) for why IP and Jupyter URL is N/A):
 ```
 jason@jason:~/git_repos/utmist-gpu$ python3 -m utils.helper --launch ssh-key-general
 Launching instance
