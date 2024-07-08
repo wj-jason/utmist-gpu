@@ -11,6 +11,8 @@ colorama.init()
 load_dotenv()
 
 API_KEY = os.getenv('API_KEY')
+INSTANCES = []
+SSH_KEYS = []
 
 def query(endpoint: str):
     response = requests.get(
@@ -26,6 +28,13 @@ def query(endpoint: str):
         print(response)
         return False
 
+def get_ssh_keys():
+    endpoint = 'https://cloud.lambdalabs.com/api/v1/ssh-keys'
+    data = query(endpoint)
+    if data:
+        for key in data['data']:
+            SSH_KEYS.append(key['name'])
+
 def get_all_instances():
     endpoint = "https://cloud.lambdalabs.com/api/v1/instances"
     data = query(endpoint)
@@ -34,8 +43,14 @@ def get_all_instances():
     if data:
         for inst in data['data']:
             instances.append(inst)
-
     return instances
+
+def _init_instances():
+    instances = get_all_instances()
+    if instances:
+        for inst in instances:
+            inst_id = inst["id"]
+            INSTANCES.append(inst_id)
 
 def print_instance_details():
     instances = get_all_instances()
@@ -57,10 +72,11 @@ def print_instance_details():
 def launch_instance(
         region_name: str = "us-east-1",
         instance_type_name: str = "gpu_1x_a100_sxm4",
-        ssh_key_names: list[str] = ["ssh-key-general"],
+        ssh_key_names: list[str] = SSH_KEYS,
         file_system_names: list[str] = [],
         quantity: int = 1
         ):
+    curr_instances = get_all_instances()
     print(f"{Fore.LIGHTBLUE_EX}Launching instance{Fore.RESET}") 
     payload = {
             "region_name": region_name,
@@ -82,9 +98,8 @@ def launch_instance(
         name = data["data"][0]["instance_type"]["name"];
         price  = data["data"][0]["instance_type"]["price_cents_per_hour"]/100
         inst_id = data["data"][0]["id"]
-        while "ip" not in data["data"][0]:
-            time.sleep(1)
-        ip = data["data"][0]["ip"]
+
+        ip = data["data"][0].get("ip", "N/A")
         print(f"{Fore.GREEN}Instance: {Fore.RESET}{name}")
         print(f"{Fore.YELLOW}Price per hour: {Fore.RESET}${price:.2f}")
         print(f"{Fore.CYAN}Id: {Fore.RESET}{inst_id}")
@@ -144,5 +159,6 @@ def main():
     if args.prune: terminate_all()
 
 if __name__ == '__main__':
+    get_ssh_keys()
     main()
 
