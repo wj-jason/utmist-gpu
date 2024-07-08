@@ -1,4 +1,4 @@
-# GPU Cloud
+# GPU Cloud (Fog)
 
 ```
 # launch new instance
