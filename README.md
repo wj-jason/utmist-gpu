@@ -37,7 +37,7 @@ jason@jason:~/git_repos/utmist-gpu$ python3 -m utils.helper --lsk
 ['ssh-key-general', 'ssh-key-andrew', 'ssh-key-a100']
 ```
 
-Next we can launch an instance, specifying the ssh key that is on your machine (see **notes** for why IP is N/A):
+Next we can launch an instance, specifying the ssh key that is on your machine (see **notes** for why IP and Jupyter URL is N/A):
 ```
 jason@jason:~/git_repos/utmist-gpu$ python3 -m utils.helper --launch ssh-key-general
 Launching instance
@@ -46,6 +46,7 @@ Instance: gpu_1x_a100_sxm4
 Price per hour: $1.29
 Id: <INSTANCE_ID>
 IP: N/A
+Jupyter URL: N/A
 ```
 
 After it completes, we can find the ip address by listing the active instances:
@@ -56,6 +57,7 @@ Instance: gpu_1x_a100_sxm4
 Price per hour: $1.29
 Id: <INSTANCE_ID>
 IP: <INSTANCE_IP>
+Jupyter URL: <JUPYTER_URL>
 ---------------------------------------
 ```
 
@@ -105,6 +107,6 @@ ubuntu@<INSTANCE_IP>:~$
 
 The API can be quite slow in spinning up and termininating instances. If you recently launched an instance and try to launch again, the details on the new launch may be identical to your previous instance (it may have the same ID and IP). Do not worry if this happens, there is just a delay in the API. Wait a few minutes, and call `... --ls` and you should see your new instance with unique ID and IP.
 
-When launching an instance, it may take some time for Lambda to associated a floating IP. As such, `... --ls` may return `N/A` for the IP. Waiting a minute or so will resolve this.
+When launching an instance, it may take some time for Lambda to associated a floating IP and create a Jupyter environment. As such, `... --ls` may return `N/A` for the IP or Jupyter URL. Waiting a minute or so will resolve this (Jupyter URL tends to take longer).
 
 Similar stuff for terminating, as long as you get the success message outputted, Lambda will begin terminating the instance. It will continue to show on `... --ls` until complete termination.
