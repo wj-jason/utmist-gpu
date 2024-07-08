@@ -33,15 +33,15 @@ API_KEY =
 
 After setting everything up, we can start by checking if any instances are active, and the known ssh keys on the account:
 ```
-jason@jason:~/git_repos/utmist-gpu$ python3 -m utils.helper --ls
+(venv) jason@jason:~/git_repos/utmist-gpu$ fog --ls
 No instances available.
-jason@jason:~/git_repos/utmist-gpu$ python3 -m utils.helper --lsk
+(venv) jason@jason:~/git_repos/utmist-gpu$ fog --lsk
 ['ssh-key-general', 'ssh-key-andrew', 'ssh-key-a100']
 ```
 
 Next we can launch an instance, specifying the ssh key that is on your machine (see [notes](#notes) for why IP and Jupyter URL is N/A):
 ```
-jason@jason:~/git_repos/utmist-gpu$ python3 -m utils.helper --launch ssh-key-general
+(venv) jason@jason:~/git_repos/utmist-gpu$ fog --launch ssh-key-general
 Launching instance
 Instance launched.
 Instance: gpu_1x_a100_sxm4
@@ -53,7 +53,7 @@ Jupyter URL: N/A
 
 After it completes, we can find the ip address by listing the active instances:
 ```
-jason@jason:~/git_repos/utmist-gpu$ python3 -m utils.helper --ls
+(venv) jason@jason:~/git_repos/utmist-gpu$ fog --ls
 ---------------------------------------
 Instance: gpu_1x_a100_sxm4
 Price per hour: $1.29
@@ -65,7 +65,7 @@ Jupyter URL: <JUPYTER_URL>
 
 Finally we can ssh into our instance using the specified ip address
 ```
-jason@jason:~/git_repos/utmist-gpu$ ssh -i ~/.ssh/ssh-key-general.pem ubuntu@<INSTANCE_IP>
+(venv) jason@jason:~/git_repos/utmist-gpu$ ssh -i ~/.ssh/ssh-key-general.pem ubuntu@<INSTANCE_IP>
 
 Welcome to Ubuntu 22.04.3 LTS (GNU/Linux 6.2.0-37-generic x86_64)
  .============.
