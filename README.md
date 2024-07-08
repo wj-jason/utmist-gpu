@@ -20,7 +20,7 @@ python3 -m utils.helper --prune
 # .env
 API_KEY =
 ```
-3. Get ssh key (ask Rachel)
+3. Get ssh key (ask Rachel) [help](https://lambdalabs.com/blog/getting-started-with-lambda-cloud-gpu-instances)
 4. From root of repository, run any of the commands above
 5. Once you have an active instance, run `ssh -i ~/.ssh/<KEY> ubuntu@<INSTANCE_IP>`
 
