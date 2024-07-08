@@ -2,10 +2,13 @@
 
 ```
 # launch new instance
-python3 -m utils.helper --launch
+python3 -m utils.helper --launch <SSH_KEY_NAME>
 
 # list active instances and details
 python3 -m utils.helper --ls
+
+# list all ssh key names
+python3 -m utils.helper --lsk
 
 # stop instance by ID
 python3 -m utils.helper --stop <INSTANCE_ID>
