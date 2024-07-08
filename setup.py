@@ -10,7 +10,7 @@ setup(
         ],
     },
     install_requires=[
-		'requests',
+        'requests',
         'colorama',
         'python-dotenv'
     ],
