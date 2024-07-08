@@ -54,10 +54,12 @@ def print_instance_details():
             price  = inst["instance_type"]["price_cents_per_hour"]/100
             inst_id = inst["id"]
             ip = inst.get("ip", "N/A")
+            j_url = inst.get("jupyter_url", "N/A")
             print(f"{Fore.GREEN}Instance: {Fore.RESET}{name}")
             print(f"{Fore.YELLOW}Price per hour: {Fore.RESET}${price:.2f}")
             print(f"{Fore.CYAN}Id: {Fore.RESET}{inst_id}")
             print(f"{Fore.MAGENTA}IP: {Fore.RESET}{ip}")
+            print(f"{Fore.BLUE}Jupyter URL: {Fore.RESET}{j_url}") 
             print(f"---------------------------------------")
     else:
         print(f"{Fore.RED}No instances available.{Fore.RESET}") 
@@ -101,11 +103,12 @@ def launch_instance(
         name = data["data"]["instance_type"]["name"]
         price = data["data"]["instance_type"]["price_cents_per_hour"]/100
         ip = data.get("ip", "N/A")
-        
+        j_url = data.get("jupyter_url", "N/A") 
         print(f"{Fore.GREEN}Instance: {Fore.RESET}{name}")
         print(f"{Fore.YELLOW}Price per hour: {Fore.RESET}${price:.2f}")
         print(f"{Fore.CYAN}Id: {Fore.RESET}{inst_id}")
         print(f"{Fore.MAGENTA}IP: {Fore.RESET}{ip}")
+        print(f"{Fore.BLUE}Jupyter URL:{Fore.RESET} {j_url}")
 
 
 def terminate_instance(instance_id):
