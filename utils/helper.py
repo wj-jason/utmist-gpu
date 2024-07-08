@@ -64,10 +64,10 @@ def print_instance_details():
 
 def launch_instance( 
         ssh_key_name: str,
-        region_name: str = "us-east-1",
+        region_name: str = "us-west-2",
         instance_type_name: str = "gpu_1x_a100_sxm4",
         # ssh_key_names: list[str] = SSH_KEYS,
-        file_system_names: list[str] = [],
+        file_system_names: list[str] = ["shared-dir"],
         quantity: int = 1,
         ):
     # why make it a list if you can't put multiple values???
@@ -87,7 +87,7 @@ def launch_instance(
             json=payload
             )
     if response.status_code != 200:
-        print(response)
+        print(response.json())
         return
 
     response = response.json()
