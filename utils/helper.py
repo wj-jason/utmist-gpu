@@ -14,6 +14,15 @@ API_KEY = os.getenv('API_KEY')
 INSTANCES = []
 SSH_KEYS = []
 
+def print_error(response: dict):
+    for key, value in response.items():
+        if isinstance(value, dict):
+            print(f"{Fore.LIGHTRED_EX}{key}:{Fore.RESET}")
+            for sub_key, sub_value in value.items():
+                print(f"  {Fore.LIGHTRED_EX}{sub_key}: {sub_value}{Fore.RESET}")
+        else:
+            print(f"{Fore.LIGHTRED_EX}{key}: {value}{Fore.RESET}")
+
 def query(endpoint: str):
     response = requests.get(
             endpoint,
@@ -24,8 +33,7 @@ def query(endpoint: str):
         data = response.json()
         return data
     else:
-        print("[ERROR] ", response.status_code)
-        print(response)
+        print_error(response.json())
         return False
 
 def get_ssh_keys():
@@ -50,13 +58,18 @@ def print_instance_details():
     if instances:
         print(f"---------------------------------------")
         for inst in instances:
+            alias = inst.get("name", "None")
+            status = inst["status"]
             name = inst["instance_type"]["name"]
-            price  = inst["instance_type"]["price_cents_per_hour"]/100
+            price = inst["instance_type"]["price_cents_per_hour"]/100
+            # price = round(price/100, 2) if price else "N/A"
             inst_id = inst["id"]
             ip = inst.get("ip", "N/A")
             j_url = inst.get("jupyter_url", "N/A")
+            print(f"{Fore.CYAN}Alias: {Fore.RESET}{alias}")
             print(f"{Fore.GREEN}Instance: {Fore.RESET}{name}")
             print(f"{Fore.YELLOW}Price per hour: {Fore.RESET}${price:.2f}")
+            print(f"{Fore.RED}Status: {Fore.RESET}{status}")
             print(f"{Fore.CYAN}Id: {Fore.RESET}{inst_id}")
             print(f"{Fore.MAGENTA}IP: {Fore.RESET}{ip}")
             print(f"{Fore.BLUE}Jupyter URL: {Fore.RESET}{j_url}") 
@@ -66,8 +79,9 @@ def print_instance_details():
 
 def launch_instance( 
         ssh_key_name: str,
-        region_name: str = "us-west-2",
+        alias: str,
         instance_type_name: str = "gpu_1x_a100_sxm4",
+        region_name: str = "us-west-2",
         # ssh_key_names: list[str] = SSH_KEYS,
         file_system_names: list[str] = ["shared-dir"],
         quantity: int = 1,
@@ -80,7 +94,8 @@ def launch_instance(
             "instance_type_name": instance_type_name,
             "ssh_key_names": ssh_key_names,
             "file_system_names": file_system_names,
-            "quantity": 1
+            "quantity": quantity,
+            "name": alias
             }
     endpoint = "https://cloud.lambdalabs.com/api/v1/instance-operations/launch"
     response = requests.post(
@@ -89,7 +104,7 @@ def launch_instance(
             json=payload
             )
     if response.status_code != 200:
-        print(response.json())
+        print_error(response.json())
         return
 
     response = response.json()
@@ -100,10 +115,12 @@ def launch_instance(
     # print(data)
     if data:    
         print(f"{Fore.LIGHTGREEN_EX}Instance launched.{Fore.RESET}")
+        alias = alias if alias else "None"
         name = data["data"]["instance_type"]["name"]
         price = data["data"]["instance_type"]["price_cents_per_hour"]/100
         ip = data.get("ip", "N/A")
         j_url = data.get("jupyter_url", "N/A") 
+        print(f"{Fore.CYAN}Alias: {Fore.RESET}{alias}")
         print(f"{Fore.GREEN}Instance: {Fore.RESET}{name}")
         print(f"{Fore.YELLOW}Price per hour: {Fore.RESET}${price:.2f}")
         print(f"{Fore.CYAN}Id: {Fore.RESET}{inst_id}")
@@ -149,20 +166,52 @@ def terminate_all():
     else:
         print("[ERROR] Failed to fetch instances.")
 
+def print_gpus(gpus):
+    print(f"{Fore.LIGHTCYAN_EX}NAME: PRICE PER HOUR{Fore.RESET}")
+    for (gpu, price) in gpus.items():
+        print(f"{gpu}: ${price}")
+
 def main():
     get_ssh_keys()
+    gpus = {
+        "gpu_1x_a10": 0.75,
+        "gpu_1x_a100_sxm4": 1.29,
+        "gpu_8x_h100_sxm5": 27.92,
+        "gpu_1x_h100_pcie": 2.49,
+        "gpu_8x_a100_80gb_sxm4": 14.32,
+        "gpu_1x_rtx6000": 0.5,
+        "gpu_1x_a100": 1.29,
+        "gpu_2x_a100": 2.58,
+        "gpu_4x_a100": 5.16,
+        "gpu_8x_a100": 10.32,
+        "gpu_1x_a6000": 0.80,
+        "gpu_2x_a6000": 1.60,
+        "gpu_4x_a6000": 3.20,
+        "gpu_8x_v100": 4.40,
+    }
+
     parser = argparse.ArgumentParser(description="Lambda Cloud API Client")
     parser.add_argument('--ls', action='store_true', help='Get all instances')
+    parser.add_argument('--gpu', action='store_true', help='See all gpu instances')
     parser.add_argument('--lsk', action='store_true', help='Get all SSH key names')
-    parser.add_argument('--launch', type=str, help='Start an instance')
+    parser.add_argument('--launch', type=str, nargs='+', help='Start an instance')
     parser.add_argument('--stop', type=str, help='Stop an instance by ID')
     parser.add_argument('--prune', action='store_true', help='Stop all instances')
 
     args = parser.parse_args()
 
     if args.ls: print_instance_details()
+    if args.gpu: print_gpus(gpus)
     if args.lsk: print(SSH_KEYS)
-    if args.launch: launch_instance(args.launch)
+    if args.launch: 
+        if len(args.launch) not in [2, 3]:
+            print(f'''{Fore.LIGHTRED_EX}Usage: fog --launch <KEY_NAME> <ALIAS> <GPU>
+    <KEY_NAME>   Your SSH key (Mandatory)
+    <ALIAS>      Instance alias (Mandatory)
+    <GPU>        GPU instance type (Optional, default='1x_a100_sxm4')
+    Run `fog --gpu` for more information on GPU types''')
+        else:
+            launch_instance(*args.launch)
     if args.stop: terminate_instance(args.stop)
     if args.prune: terminate_all()
 
