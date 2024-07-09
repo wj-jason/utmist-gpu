@@ -146,6 +146,6 @@ Jupyter URL: <JUPTYER_URL>
 ```
 
 ## Resnet50 Example
-To try out the Resnet50 example, follow the above steps to spin up an instance. Copy the 3 `.py` files from `examples/resnet50/` to the instance, then run `main.py`. You should be able to observe data being extracted into the instances temprorary filesystem (everything except `shared-dir/`), and a train/test session using Resnet50 on our dataset.
+To try out the Resnet50 example, follow the above steps to spin up an instance. Copy the 3 `.py` files from `examples/resnet50/` to the instance, then `pip install librosa` and run `main.py`. You should be able to observe data being extracted into the instances temprorary filesystem (everything except `shared-dir/`), and a train/test session using Resnet50 on our dataset.
 
-
+Note thet all Lambda instances come with the [Lambda Stack](https://lambdalabs.com/lambda-stack-deep-learning-software) pre-installed. This is why we only need to install librosa. 
