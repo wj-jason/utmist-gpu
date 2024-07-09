@@ -95,7 +95,7 @@ class TrainingDataProcessor:
                 one_hot_labels[i, label_to_index[label]] = 1
 
     # 6. Return spectrograms and labels as a multi-dimensional list
-    return [spectrograms, one_hot_labels]
+    return spectrograms, one_hot_labels
 
 if __name__ == '__main__':
   processor = TrainingDataProcessor()

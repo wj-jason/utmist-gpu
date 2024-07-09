@@ -7,7 +7,7 @@ from tensorflow.keras.callbacks import EarlyStopping
 
 if __name__ == '__main__':
     processor = TrainingDataProcessor()
-    X, Y = processor.get_annotations()
+    X, Y = processor.get_mel_spectrograms()
     spectrograms_preprocessed = preprocess_spectrograms_for_resnet50(X)
     X_train, X_test, Y_train, Y_test = train_test_split(spectrograms_preprocessed, Y, test_size=0.2, random_state=42)
     model = ResNet50_multi_label(pretrained=True)
