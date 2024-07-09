@@ -19,7 +19,11 @@ fog --stop <INSTANCE_ID>
 # stop all instances
 fog --prune
 ```
-## To use:
+1. [To Use](#to-use)
+2. [Complete Walkthrough](#complete-walkthrough)
+3. [Resnet50 Example](#resnet50-example)
+
+## To Use:
 1. Clone this repository
 2. Create a venv `python3 -m venv venv` and activate it
 3. Run `pip install .`
@@ -32,7 +36,7 @@ API_KEY =
 4. From root of repository, run any of the commands above
 5. Once you have an active instance, run `ssh -i ~/.ssh/<KEY> ubuntu@<INSTANCE_IP>`
 
-## Full Example
+## Complete Walkthrough
 
 After setting everything up, we can start by checking if any instances are active, and the known ssh keys on the account:
 ```
@@ -117,7 +121,7 @@ ubuntu@<INSTANCE_IP>:~$ ls shared-dir/
  annotations_alexanderc.db                   annotations_chrisk.db   annotations_sam.db
 ```
 
-It is up to you how you want to load your models from here, but what I recommend is to access the instance with a Jupyter interface and upload your files locally from there, then either use the Jupyter terminal or SSH into the instance to interact with the uploaded files using the terminal.
+It is up to you how you want to load your models from here, but what I recommend is to access the instance with a Jupyter interface and upload your files locally from there, then either use the Jupyter terminal or SSH into the instance to interact with the uploaded files using the terminal. 
 
 Remember not to touch `shared-dir/` since it contains our dataset which must be shared between instances.
 
@@ -140,3 +144,8 @@ IP: <INSTANCE_IP>
 Jupyter URL: <JUPTYER_URL>
 ---------------------------------------
 ```
+
+## Resnet50 Example
+To try out the Resnet50 example, follow the above steps to spin up an instance. Copy the 3 `.py` files from `examples/resnet50/` to the instance, then run `main.py`. You should be able to observe data being extracted into the instances temprorary filesystem (everything except `shared-dir/`), and a train/test session using Resnet50 on our dataset.
+
+
