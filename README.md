@@ -102,7 +102,7 @@ IP: <INSTANCE_IP>
 Jupyter URL: <JUPYTER_URL>
 ```
 
-To access the instance, we can SSH using the specified ip address (this can sometimes be a little buggy or slow, you may need to try a few times).
+To access the instance, we can SSH using the specified ip address.
 ```
 (venv) jason@jason:~/git_repos/utmist-gpu$ ssh -i ~/.ssh/ssh-key-general.pem ubuntu@<INSTANCE_IP>
 ```
