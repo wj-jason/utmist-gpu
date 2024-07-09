@@ -117,9 +117,7 @@ ubuntu@<INSTANCE_IP>:~$ ls shared-dir/
  annotations_alexanderc.db                   annotations_chrisk.db   annotations_sam.db
 ```
 
-It is up to you how you want to load your models from here, but some possible ways are to:
-1. Use the Jupyter instance and upload files from your local machine
-2. Load your code to Github and clone the repository into the instance
+It is up to you how you want to load your models from here, but what I recommend is to access the instance with a Jupyter interface and upload your files locally from there, then either use the Jupyter terminal or SSH into the instance to interact with the uploaded files using the terminal.
 
 Remember not to touch `shared-dir/` since it contains our dataset which must be shared between instances.
 
