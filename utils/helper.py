@@ -61,8 +61,8 @@ def print_instance_details():
             alias = inst.get("name", "None")
             status = inst["status"]
             name = inst["instance_type"]["name"]
-            price = inst.get("instance_type", {}).get("price_cents_per_hours")
-            price = price/100 if price else "N/A"
+            price = inst["instance_type"]["price_cents_per_hour"]/100
+            # price = round(price/100, 2) if price else "N/A"
             inst_id = inst["id"]
             ip = inst.get("ip", "N/A")
             j_url = inst.get("jupyter_url", "N/A")
