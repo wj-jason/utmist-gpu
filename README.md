@@ -42,7 +42,7 @@ No instances available.
 ['ssh-key-general', 'ssh-key-andrew', 'ssh-key-a100']
 ```
 
-Next we can launch an instance, specifying your SSH key and an alias for the instance. Note that while booting, the IP and Jupyter URL will be unvailable.
+Next we can launch an instance, specifying your SSH key and an alias for the instance (it is recommended that you alias with your name for clarity) . Note that while booting, the IP and Jupyter URL will be unvailable.
 ```
 (venv) jason@jason:~/git_repos/utmist-gpu$ fog --launch ssh-key-general jason
 Launching instance
