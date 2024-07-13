@@ -36,6 +36,8 @@ API_KEY =
 4. From root of repository, run any of the commands above
 5. Once you have an active instance, run `ssh -i ~/.ssh/<KEY> ubuntu@<INSTANCE_IP>`
 
+**IMPORTANT:** To stay up to date on any changes, ensure to `git pull` and `pip install .` to check for any updates before using.
+
 ## Complete Walkthrough
 
 After setting everything up, we can start by checking if any instances are active, and the known ssh keys on the account:
