@@ -11,7 +11,6 @@ colorama.init()
 load_dotenv()
 
 API_KEY = os.getenv('API_KEY')
-INSTANCES = []
 SSH_KEYS = []
 
 def print_error(response: dict):
@@ -170,6 +169,8 @@ def print_gpus(gpus):
     print(f"{Fore.LIGHTCYAN_EX}NAME: PRICE PER HOUR{Fore.RESET}")
     for (gpu, price) in gpus.items():
         print(f"{gpu}: ${price}")
+
+    print(f"{Fore.LIGHTCYAN_EX}For up-to-date information, see: https://lambdalabs.com/service/gpu-cloud{Fore.RESET}")
 
 def main():
     get_ssh_keys()
