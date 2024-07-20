@@ -1,5 +1,5 @@
 # Lambda Cloud for UTMIST (Fog)
-https://www.youtube.com/watch?v=eqP13xZ0_c0
+For a quick start tutorial: https://www.youtube.com/watch?v=eqP13xZ0_c0
 ```
 # launch new instance (GPU_TYPE is optional, gpu_1x_a100_sxm4 by default)
 fog --launch <SSH_KEY_NAME> <ALIAS> <GPU_TYPE>
